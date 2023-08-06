@@ -22,4 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/create-user', [UserController::class, 'createUser']);
 Route::get('/get-token', [UserController::class, 'createToken']);
+Route::get('/get-latest-prediction', [PredictionController::class, 'getLatestPrediction']);
 Route::post('/store-prediction', [PredictionController::class, 'storePrediction']);

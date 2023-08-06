@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Prediction;
 use Illuminate\Http\Request;
+use App\Events\NewDataInserted;
 use Illuminate\Support\Facades\DB;
 
 class PredictionController extends Controller
@@ -26,6 +27,7 @@ class PredictionController extends Controller
 
             if ($prediction->save()) {
                 DB::commit();
+                event(new NewDataInserted($prediction->toArray()));
                 return json_encode([
                     "status" => true,
                     "message" => "Success"
@@ -45,5 +47,15 @@ class PredictionController extends Controller
                 "data" => $th
             ]);
         }
+    }
+
+    public function getLatestPrediction()
+    {
+        $data = Prediction::latest()->first();
+        return json_encode([
+            "status" => true,
+            "message" => "Success",
+            "data" => $data->toArray()
+        ]);
     }
 }
