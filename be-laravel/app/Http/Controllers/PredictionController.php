@@ -52,10 +52,11 @@ class PredictionController extends Controller
     public function getLatestPrediction()
     {
         $data = Prediction::latest()->first();
-        return json_encode([
+        
+        return [
             "status" => true,
             "message" => "Success",
             "data" => $data->toArray()
-        ]);
+        ];
     }
 }

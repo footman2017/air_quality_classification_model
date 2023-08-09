@@ -31,9 +31,11 @@ class NewDataInserted implements ShouldBroadcast
     // public function broadcastOn(): array
     // {
     //     return [
-    //         new PrivateChannel('channel-name'),
+    //         new PrivateChannel('data-channel'),
     //     ];
     // }
+
+
     public function broadcastOn()
     {
         return new Channel('data-channel');
