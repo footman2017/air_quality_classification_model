@@ -27,10 +27,16 @@ y = encoder.fit_transform(df['categori'].values)
 
 # Step 2: TabNet Model Preparation
 # Assuming X is your features and y is your target
-n_d = 8  # Width of the decision prediction layer. Bigger values gives more capacity to the model with the risk of overfitting.
-n_a = 8  # Width of the attention embedding for each mask. According to the paper n_d=n_a is usually a good choice.
-n_steps = 3  # Number of steps in the architecture (usually between 3 and 10)
-gamma = 1.3  # This is the coefficient for feature reusage in the masks. A value close to 1 will make mask selection least correlated between layers. Values range from 1.0 to 2.0.
+# n_d = 8  # Width of the decision prediction layer. Bigger values gives more capacity to the model with the risk of overfitting.
+# n_a = 8  # Width of the attention embedding for each mask. According to the paper n_d=n_a is usually a good choice.
+# n_steps = 3  # Number of steps in the architecture (usually between 3 and 10)
+# gamma = 1.3  # This is the coefficient for feature reusage in the masks. A value close to 1 will make mask selection least correlated between layers. Values range from 1.0 to 2.0.
+
+#after tunning
+n_d = 11
+n_a = 14
+n_steps = 3
+gamma = 1.595641721553123
 
 clf = TabNetClassifier(
     n_d=n_d, n_a=n_a, n_steps=n_steps, gamma=gamma,
@@ -42,7 +48,7 @@ clf = TabNetClassifier(
 )
 
 # Step 3: K-Cross Validation
-k = 5
+k = 2
 # kf = StratifiedKFold(n_splits=k)
 kf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
 aug = ClassificationSMOTE(p=0.2)
@@ -73,7 +79,7 @@ for train_index, val_index in kf.split(X, y):
     #     augmentations=aug
     # )
 
-# Step 4: Evaluation
-predictions = clf.predict(X_val)
-accuracy = np.mean(predictions == y_val)
-print(f"Validation Accuracy: {accuracy:.4f}")
+    # Step 4: Evaluation
+    predictions = clf.predict(X_val)
+    accuracy = np.mean(predictions == y_val)
+    print(f"Validation Accuracy: {accuracy:.4f}")
