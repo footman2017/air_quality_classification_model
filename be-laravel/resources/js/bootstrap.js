@@ -5,7 +5,13 @@
  */
 
 import axios from 'axios';
+import $ from "jquery";
+import select2 from 'select2';
+
+select2();
+
 window.axios = axios;
+window.$ = $;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

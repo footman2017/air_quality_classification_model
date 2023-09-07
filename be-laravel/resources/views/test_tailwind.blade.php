@@ -4,11 +4,35 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body id="landing-page">
-    <div class="container mx-auto p-4">
+<body id="landing-page-testing">
+    <div class="container mx-auto p-4 w-9/12">
+        <div class="grid grid-cols-2 mb-4">
+            <div class="flex">
+                <p class="text-xl font-semibold mr-4">Lokasi</p>
+                <select id="select_location">
+                    <option value="BANDUNG">
+                        Bandung Cihapit
+                    </option>
+                    <option value="DKI1">
+                        DKI Bundaran HI
+                    </option>
+                    <option value="DKI2">
+                        DKI Kelapa Gading
+                    </option>
+                    <option value="DKI3">
+                        DKI Jagakarsa
+                    </option>
+                </select>
+            </div>
+            <div>
+
+            </div>
+        </div>
         <div class="grid grid-cols-6 gap-4">
             <div class="text-center border border-solid rounded-md border-slate-400">
                 <p class="text-2xl font-semibold">PM<sub>10</sub></p>

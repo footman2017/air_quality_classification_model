@@ -24,6 +24,7 @@ class PredictionController extends Controller
             $prediction->no2 = $request->no2;
             $prediction->prediction_result = $request->prediction_result;
             $prediction->accuracy = $request->accuracy;
+            $prediction->location = $request->location;
 
             if ($prediction->save()) {
                 DB::commit();
@@ -49,14 +50,14 @@ class PredictionController extends Controller
         }
     }
 
-    public function getLatestPrediction()
+    public function getLatestPrediction($location_id)
     {
-        $data = Prediction::latest()->first();
-        
+        $data = Prediction::where('location', $location_id)->latest()->first();
+
         return [
             "status" => true,
             "message" => "Success",
-            "data" => $data->toArray()
+            "data" => $data ? $data->toArray() : []
         ];
     }
 }

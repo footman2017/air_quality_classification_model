@@ -6,7 +6,7 @@ import numpy as np
 from pytorch_tabnet.tab_model import TabNetClassifier
 import joblib
 
-KATEGORI = {0: 'BAIK', 1: 'SEDANG', 2: 'TIDAK BAIK'}
+KATEGORI = {0: 'BAIK', 1: 'SEDANG', 2: 'TIDAK SEHAT'}
 
 # Load model Keras
 # Ganti dengan lokasi dan nama model Anda
@@ -70,6 +70,7 @@ def send_to_be(json_data, prediction_result):
         "co": json_data["co"],
         "o3": json_data["o3"],
         "no2": json_data["no2"],
+        "location": json_data["location"],
         "prediction_result": int(prediction_result['category']),
         "accuracy": prediction_result['accuracy']
     })
