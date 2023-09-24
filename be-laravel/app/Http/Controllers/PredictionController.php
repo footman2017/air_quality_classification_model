@@ -60,4 +60,19 @@ class PredictionController extends Controller
             "data" => $data ? $data->toArray() : []
         ];
     }
+
+    public function get24Prediction($location_id)
+    {
+        $data = Prediction::query()
+            ->where('location', $location_id)
+            ->orderBy('id', 'desc')
+            ->limit(24)
+            ->get();
+
+        return [
+            "status" => true,
+            "message" => "Success",
+            "data" => $data ? $data->toArray() : []
+        ];
+    }
 }

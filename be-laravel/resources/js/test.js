@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import Chart from "chart.js/auto";
 
 $(function () {
     let $root = $("#landing-page-testing");
@@ -13,6 +14,8 @@ $(function () {
     const hasilPrediksiElm = $("#prediction");
     const AkurasiElm = $("#akurasi");
     const selectLocation = $("#select_location");
+
+    let chartPm10, chartPm25, chartSo2, chartCo, chartO3, chartNo2;
 
     const categori = ["BAIK", "SEDANG", "TIDAK SEHAT"];
 
@@ -76,6 +79,111 @@ $(function () {
                     );
 
                     console.log(formattedDate); // Output: "9 Agustus 2023"
+
+                    get24LatestData();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const formatWaktu = (timestamp) => {
+        const date = new Date(timestamp);
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        return `${day}-${month} ${hours}:${minutes}`;
+    };
+
+    const createChart = (idElement, labelTitle, data) => {
+        return new Chart(document.getElementById(idElement), {
+            type: "line",
+            data: {
+                labels: data.map((row) => row.waktu),
+                datasets: [
+                    {
+                        label: labelTitle,
+                        data: data.map((row) => row.count),
+                    },
+                ],
+            },
+        });
+    };
+
+    function get24LatestData() {
+        let config = {
+            method: "get",
+            maxBodyLength: Infinity,
+            url: `${
+                window.origin
+            }/api/get-24-prediction/${selectLocation.val()}`,
+            headers: {},
+        };
+
+        showLoading();
+
+        axios
+            .request(config)
+            .then((response) => {
+                Swal.close();
+                if (response.data.status && response.data.data.length != 0) {
+                    console.log(response.data.data);
+
+                    const dataPm10 = response.data.data.map((item) => ({
+                        waktu: formatWaktu(item.created_at),
+                        count: item.pm10,
+                    }));
+                    const dataPm25 = response.data.data.map((item) => ({
+                        waktu: formatWaktu(item.created_at),
+                        count: item.pm25,
+                    }));
+                    const dataSo2 = response.data.data.map((item) => ({
+                        waktu: formatWaktu(item.created_at),
+                        count: item.so2,
+                    }));
+                    const dataCo = response.data.data.map((item) => ({
+                        waktu: formatWaktu(item.created_at),
+                        count: item.co,
+                    }));
+                    const dataO3 = response.data.data.map((item) => ({
+                        waktu: formatWaktu(item.created_at),
+                        count: item.o3,
+                    }));
+                    const dataNo2 = response.data.data.map((item) => ({
+                        waktu: formatWaktu(item.created_at),
+                        count: item.no2,
+                    }));
+
+                    dataPm10.reverse();
+                    dataPm25.reverse();
+                    dataSo2.reverse();
+                    dataCo.reverse();
+                    dataO3.reverse();
+                    dataNo2.reverse();
+
+                    // console.log("Pm10 Data:", dataPm10);
+                    // console.log("Pm25 Data:", dataPm25);
+                    // console.log("SO2 Data:", dataSo2);
+                    // console.log("CO Data:", dataCo);
+                    // console.log("O3 Data:", dataO3);
+                    // console.log("NO2 Data:", dataNo2);
+
+                    chartPm10?.destroy();
+                    chartPm25?.destroy();
+                    chartSo2?.destroy();
+                    chartCo?.destroy();
+                    chartO3?.destroy();
+                    chartNo2?.destroy();
+
+                    chartPm10 = createChart("pm10Chart", "PM10", dataPm10);
+                    chartPm25 = createChart("pm25Chart", "PM25", dataPm25);
+                    chartSo2 = createChart("so2Chart", "SO2", dataSo2);
+                    chartCo = createChart("coChart", "CO", dataCo);
+                    chartO3 = createChart("o3Chart", "O3", dataO3);
+                    chartNo2 = createChart("no2Chart", "NO2", dataNo2);
+                    // Extract data for each pollutant and dates
                 }
             })
             .catch((error) => {
@@ -98,7 +206,6 @@ $(function () {
             // AkurasiElm.html(`${data.data.accuracy} %`);
             hitBe(selectLocation.val());
         }
-        // You can make Axios requests here or do any other actions.
     });
 
     selectLocation.select2();

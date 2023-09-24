@@ -72,8 +72,29 @@
             </div>
 
             <div class="text-center border border-solid rounded-md border-slate-400">
-                <p class="text-2xl font-semibold">Akurasi</p>
+                <p class="text-2xl font-semibold">Akurasi Prediksi</p>
                 <p id="akurasi" class="text-xl mt-2"></p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="chart-container" style="position: relative; height:min-content; width:100%">
+                <canvas id="pm10Chart"></canvas>
+            </div>
+            <div class="chart-container" style="position: relative; height:min-content; width:100%">
+                <canvas id="pm25Chart"></canvas>
+            </div>
+            <div class="chart-container" style="position: relative; height:min-content; width:100%">
+                <canvas id="so2Chart"></canvas>
+            </div>
+            <div class="chart-container" style="position: relative; height:min-content; width:100%">
+                <canvas id="coChart"></canvas>
+            </div>
+            <div class="chart-container" style="position: relative; height:min-content; width:100%">
+                <canvas id="o3Chart"></canvas>
+            </div>
+            <div class="chart-container" style="position: relative; height:min-content; width:100%">
+                <canvas id="no2Chart"></canvas>
             </div>
         </div>
     </div>
