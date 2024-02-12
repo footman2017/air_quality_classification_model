@@ -15,6 +15,22 @@ class PredictionController extends Controller
     {
         DB::beginTransaction();
         try {
+            $latest_data = Prediction::where('location', $request->location)->latest()->first();
+            if (
+                $latest_data &&
+                $latest_data->pm10 == $request->pm10 &&
+                $latest_data->pm25 == $request->pm25 &&
+                $latest_data->so2 == $request->so2 &&
+                $latest_data->co == $request->co &&
+                $latest_data->o3 == $request->o3 &&
+                $latest_data->no2 == $request->no2
+            ) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Data Tidak Berubah"
+                ]);
+            }
+
             $prediction = new Prediction;
             $prediction->pm10 = $request->pm10;
             $prediction->pm25 = $request->pm25;
@@ -29,20 +45,20 @@ class PredictionController extends Controller
             if ($prediction->save()) {
                 DB::commit();
                 event(new NewDataInserted($prediction->toArray()));
-                return json_encode([
+                return response()->json([
                     "status" => true,
                     "message" => "Success"
                 ]);
             } else {
                 DB::rollBack();
-                return json_encode([
+                return response()->json([
                     "status" => false,
                     "message" => "Error"
                 ]);
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            return json_encode([
+            return response()->json([
                 "status" => false,
                 "message" => "Error",
                 "data" => $th
